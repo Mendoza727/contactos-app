@@ -5,7 +5,7 @@
     "email": "juancamilomendozavillegas14@email.com",
     "phones": [
       { "id": "p1", "number": "3001234567", "label": "mobile" },
-      { "id": "p1", "number": "3014798364", "label": "mobile" }
+      { "id": "p2", "number": "3014798364", "label": "mobile" }
     ],
     "createdAt": "2026-02-17T00:00:00.000Z",
     "updatedAt": "2026-02-17T00:00:00.000Z"

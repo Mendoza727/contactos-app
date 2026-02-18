@@ -1,7 +1,15 @@
-import React from 'react';
-import { Card, Text, IconButton, Avatar } from 'react-native-paper';
+import React, { useState, useRef } from 'react';
 import { View } from 'react-native';
+import {
+  Card,
+  Text,
+  IconButton,
+  Avatar,
+  Button
+} from 'react-native-paper';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Contact } from '../models/contact.model';
+import { ContactDetailsModal } from './ContactDetailsModal';
 
 interface Props {
   contact: Contact;
@@ -21,42 +29,80 @@ const getInitials = (name: string) => {
 
 export const ContactCard = ({
   contact,
-  onPress,
   onEdit,
   onDelete
 }: Props) => {
-  return (
-    <Card style={{ margin: 10 }} onPress={onPress}>
-      <Card.Content>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          
-          <Avatar.Text
-            size={48}
-            label={getInitials(contact.name)}
-            style={{ marginRight: 15 }}
-          />
 
-          <View style={{ flex: 1 }}>
-            <Text variant="titleMedium">{contact.name}</Text>
-            <Text>{contact.email}</Text>
-            <Text>
-              {contact.phones.map(p => p.number).join(' • ')}
-            </Text>
-          </View>
+  const swipeRef = useRef<Swipeable>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
-        </View>
-      </Card.Content>
-
-      {(onEdit || onDelete) && (
-        <Card.Actions>
-          {onEdit && (
-            <IconButton icon="pencil" onPress={onEdit} />
-          )}
-          {onDelete && (
-            <IconButton icon="delete" onPress={onDelete} />
-          )}
-        </Card.Actions>
+  const renderRightActions = () => (
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {onEdit && (
+        <IconButton
+          icon="pencil"
+          iconColor="white"
+          containerColor="#1976D2"
+          size={28}
+          onPress={() => {
+            swipeRef.current?.close();
+            onEdit();
+          }}
+        />
       )}
-    </Card>
+      {onDelete && (
+        <IconButton
+          icon="delete"
+          iconColor="white"
+          containerColor="#D32F2F"
+          size={28}
+          onPress={() => {
+            swipeRef.current?.close();
+            onDelete();
+          }}
+        />
+      )}
+    </View>
+  );
+
+  return (
+    <>
+      <Swipeable
+        ref={swipeRef}
+        renderRightActions={renderRightActions}
+      >
+        <Card style={{ margin: 10 }}>
+          <Card.Content>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              
+              <Avatar.Text
+                size={56}
+                label={getInitials(contact.name)}
+                style={{ marginRight: 15 }}
+              />
+
+              <Text variant="titleMedium">
+                {contact.name}
+              </Text>
+            </View>
+
+            <Button
+              mode="text"
+              style={{ marginTop: 10 }}
+              onPress={() => setModalVisible(true)}
+            >
+              View Contact
+            </Button>
+
+          </Card.Content>
+        </Card>
+      </Swipeable>
+
+      <ContactDetailsModal
+        visible={modalVisible}
+        contact={contact}
+        onClose={() => setModalVisible(false)}
+      />
+    </>
   );
 };
