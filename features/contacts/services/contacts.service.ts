@@ -90,4 +90,30 @@ export const ContactsServices = {
 
     return updated;
   },
+
+  /**
+   * Elimina un contacto de la colección a partir de su identificador.
+   *
+   * Flujo:
+   * 1. Recupera la colección actual desde storage.
+   * 2. Genera una nueva colección excluyendo el contacto cuyo id coincida.
+   * 3. Persiste la colección resultante.
+   *
+   * Nota:
+   * - Si el id no existe, la colección se mantiene sin cambios.
+   * - Se utiliza filter para mantener inmutabilidad del arreglo.
+   *
+   * @param id Identificador único del contacto a eliminar.
+   * @returns Promise<Contact[]> Colección actualizada.
+   */
+  async delete(id: string) {
+    const contacts = await this.getAll();
+
+    // Se crea una nueva colección excluyendo el id indicado
+    const updated = contacts.filter((c) => c.id !== id);
+
+    await this.saveAll(updated);
+
+    return updated;
+  },
 };
