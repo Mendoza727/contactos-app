@@ -153,6 +153,8 @@ Implementadas con Zod + React Hook Form:
 Juan Mendoza\
 https://github.com/Mendoza727
 
+## imagenes aplicacion
+https://imgur.com/a/private-r4afLU3
 ------------------------------------------------------------------------
 
 ## 📄 Licencia
