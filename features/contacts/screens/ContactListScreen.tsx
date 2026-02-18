@@ -25,16 +25,12 @@ export const ContactListScreen = () => {
     const {
         data,
         isLoading,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
         deleteContact
     } = useContacts();
 
     const [search, setSearch] = useState('');
 
-    const contacts =
-        data?.pages.flatMap(page => page.data) ?? [];
+    const contacts = data ?? [];
 
     const filteredContacts = useMemo(() => {
         return contacts.filter(c =>
@@ -73,15 +69,7 @@ export const ContactListScreen = () => {
                 data={filteredContacts}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
-                onEndReached={() => {
-                    if (hasNextPage) fetchNextPage();
-                }}
                 onEndReachedThreshold={0.5}
-                ListFooterComponent={
-                    isFetchingNextPage ? (
-                        <ActivityIndicator style={{ margin: 20 }} />
-                    ) : null
-                }
             />
 
             <FAB
